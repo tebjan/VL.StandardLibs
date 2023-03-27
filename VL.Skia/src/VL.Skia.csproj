@@ -6,8 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <!-- We pack native dll in our own NuGet package -->
     <ShouldIncludeNativeSkiaSharp>False</ShouldIncludeNativeSkiaSharp>
+    
     <VLPackageBasePath>..\</VLPackageBasePath>
-    <PackageId>$(AssemblyName)</PackageId>
     <Description>A 2d graphics rendering library</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
@@ -18,7 +18,7 @@
     <PackageReference Include="SkiaSharp.Skottie" ExcludeAssets="build;buildTransitive" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\VL.Core.Skia\VL.Core.Skia.csproj" />
+    <ProjectReference Include="..\..\VL.Core.Skia.Windows\VL.Core.Skia.Windows.csproj" />
     <ProjectReference Include="..\..\VL.CoreLib\src\VL.CoreLib.csproj" />
     <ProjectReference Include="..\..\VL.Core\src\VL.Core.csproj" />
   </ItemGroup>

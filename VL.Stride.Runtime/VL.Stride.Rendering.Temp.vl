@@ -1,15 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" Id="VCMcVJqu2AbNoidKDyIIxx" LanguageVersion="2022.5.0-0588-gd1fc2ab3af" Version="0.128">
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" Id="VCMcVJqu2AbNoidKDyIIxx" LanguageVersion="2022.5.0-0696-g73767f5671" Version="0.128">
   <NugetDependency Id="IwFuWAsksSjNS3ODAW7nRf" Location="VL.CoreLib" Version="2022.5.0-0588-gd1fc2ab3af" />
   <Patch Id="SlSTRgKk3RKLNO8cT8Z9b1">
     <Canvas Id="RIoKw4EfYXPN47D4Py79qi" DefaultCategory="Stride" CanvasType="FullCategory">
       <Canvas Id="GvaTKvoohafPTwURvDXRqk" Name="Textures" Position="290,261">
         <!--
 
-    ************************ Pipet (Relative) ************************
+    ************************ Pipet (UV) ************************
 
 -->
-        <Node Name="Pipet (Relative)" Bounds="598,265" Id="BwxvNT8Q2cPQatQmLGHL8I" Summary="Samples pixels of a texture in UV space">
+        <Node Name="Pipet (UV)" Bounds="598,265" Id="BwxvNT8Q2cPQatQmLGHL8I" Summary="Samples pixels of a texture in UV space">
           <p:NodeReference LastCategoryFullName="Primitive" LastDependency="builtin">
             <Choice Kind="ContainerDefinition" Name="Process" />
           </p:NodeReference>
@@ -55,7 +55,7 @@
                 <Patch Id="Ma3ROM2pG4GQTUiWDMIssW" ManuallySortedPins="true">
                   <Patch Id="OC4inkqX5FCN05SyDb6Jwm" Name="Create" ManuallySortedPins="true" />
                   <Patch Id="EgJjAVF0ICYP9O2KLrN6Cs" Name="Then" ManuallySortedPins="true" />
-                  <Node Bounds="733,742,31,50" Id="SuHi4qJJvKXN5U1wJJyH5m">
+                  <Node Bounds="733,742,31,51" Id="SuHi4qJJvKXN5U1wJJyH5m">
                     <p:NodeReference LastCategoryFullName="Primitive" LastDependency="Builtin">
                       <Choice Kind="StatefulRegion" Name="Region (Stateful)" Fixed="true" />
                       <Choice Kind="ApplicationStatefulRegion" Name="ForEach" />
@@ -67,7 +67,7 @@
                       <Patch Id="HO0WZJk3gtyNxl3NcQsDgX" Name="Update" ManuallySortedPins="true" />
                       <Patch Id="TvNrj1f6o9mPyyr2q7mLIa" Name="Dispose" ManuallySortedPins="true" />
                     </Patch>
-                    <ControlPoint Id="NFUHfq9TWXgOaz9oD4khbe" Bounds="747,749,-6,0" Alignment="Top" />
+                    <ControlPoint Id="NFUHfq9TWXgOaz9oD4khbe" Bounds="747,748,-6,0" Alignment="Top" />
                     <ControlPoint Id="HBH0Yx42YuQNoPwDL23n2F" Bounds="747,787,-6,0" Alignment="Bottom" />
                   </Node>
                 </Patch>
@@ -83,7 +83,7 @@
                 <Pin Id="BWAfZuk4ulUO7aOkDcOvrv" Name="Result" Kind="OutputPin" />
                 <Pin Id="OMznwqBuL2oLDeIs5xdKuv" Name="Not Assigned" Kind="OutputPin" />
               </Node>
-              <Node Bounds="572,496,125,19" Id="Ik52WKMmuDCMKEqhNI7wcq">
+              <Node Bounds="572,496,145,19" Id="Ik52WKMmuDCMKEqhNI7wcq">
                 <p:NodeReference LastCategoryFullName="Stride.Textures" LastDependency="VL.Stride.Rendering.Temp.vl">
                   <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
                   <Choice Kind="ProcessAppFlag" Name="Pipet (AllocationFree Relative)" />
@@ -100,7 +100,7 @@
                 <Pin Id="Ihdfk3sW64kNoS0uwWNqlE" Name="Output Buffer" Kind="OutputPin" />
                 <Pin Id="OTLTaLunuZ9LJY9hFhkcvF" Name="Is Blocking" Kind="OutputPin" />
               </Node>
-              <Node Bounds="580,269,91,26" Id="CK5NhRf6flOMuwxIWbL7Ul">
+              <Node Bounds="580,269,91,19" Id="CK5NhRf6flOMuwxIWbL7Ul">
                 <p:NodeReference LastCategoryFullName="Collections.Spread" LastDependency="VL.CoreLib.vl">
                   <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
                   <Choice Kind="OperationCallFlag" Name="GetInternalArray" />

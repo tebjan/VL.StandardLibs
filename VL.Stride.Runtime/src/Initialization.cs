@@ -51,6 +51,29 @@ namespace VL.Stride.Core
 
     public sealed class Initialization : AssemblyInitializer<Initialization>
     {
+		public static string GetPathToAssetDatabase()
+        {
+            var thisDirectory = Path.GetDirectoryName(typeof(Initialization).Assembly.Location);
+            var dataDir = Path.Combine(thisDirectory, "data");
+            if (Directory.Exists(dataDir))
+                return dataDir;
+            else
+            {
+                // Are we running as source package?
+                dataDir = Path.Combine(thisDirectory, "..", "..", "..", "VL.Stride", "lib", "net6.0-windows", "data");
+                if (Directory.Exists(dataDir))
+                    return dataDir;
+            }
+            // Let Stride figure it out
+            return null;
+        }
+
+        public Initialization()
+        {
+            var dataDir = GetPathToAssetDatabase();
+            if (dataDir != null)
+                ((FileSystemProvider)VirtualFileSystem.ApplicationData).ChangeBasePath(dataDir);
+        }
         protected override void RegisterServices(IVLFactory factory)
         {
             var services = VL.Core.ServiceRegistry.Current;

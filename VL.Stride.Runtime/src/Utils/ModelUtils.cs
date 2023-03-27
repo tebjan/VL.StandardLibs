@@ -11,6 +11,7 @@ using StrideModel = global::Stride.Rendering.Model;
 using Stride.Core;
 using Stride.Graphics;
 using Stride.Graphics.Data;
+using System.Runtime.CompilerServices;
 
 namespace VL.Stride.Utils
 {
@@ -37,6 +38,7 @@ namespace VL.Stride.Utils
             /// </summary>
             /// <param name="meshDrawDatas">The mesh draw datas.</param>
             /// <param name="can32BitIndex">A flag stating if 32 bit index buffers.</param>
+            /// <param name="commandList"></param>
             public static unsafe MeshDraw MergeDrawData(IList<MeshDraw> meshDrawDatas, bool can32BitIndex, CommandList commandList)
             {
                 if (meshDrawDatas.Count == 0)
@@ -106,7 +108,7 @@ namespace VL.Stride.Utils
                         meshDrawData.VertexBuffers[0].Buffer.GetData<byte>(commandList, sourceBuffer);
                         fixed (byte* sourceBufferDataStart = &sourceBuffer[0])
                         {
-                            Utilities.CopyMemory((IntPtr)destBufferDataCurrent, (IntPtr)sourceBufferDataStart, sourceBuffer.Length);
+                            Unsafe.CopyBlockUnaligned(destBufferDataCurrent, sourceBufferDataStart, (uint)sourceBuffer.Length);
                             destBufferDataCurrent += sourceBuffer.Length;
                         }
                     }
@@ -152,8 +154,7 @@ namespace VL.Stride.Utils
 
                             fixed (byte* sourceBufferDataStart = &sourceBufferContent[0])
                             {
-                                Utilities.CopyMemory((IntPtr)destBufferDataCurrent, (IntPtr)sourceBufferDataStart,
-                                    sourceBufferContent.Length);
+                                Unsafe.CopyBlockUnaligned(destBufferDataCurrent, sourceBufferDataStart, (uint)sourceBufferContent.Length);
                                 destBufferDataCurrent += sourceBufferContent.Length;
                             }
 
@@ -268,7 +269,7 @@ namespace VL.Stride.Utils
             /// <param name="baseIndices">A possible base index buffer</param>
             /// <param name="is32Bit">Stating if baseIndices is filled with 32 bits int</param>
             /// <returns>A new index buffer.</returns>
-            public static byte[] CreateShortIndexBuffer(int offset, int count, byte[] baseIndices = null, bool is32Bit = true)
+            public static unsafe byte[] CreateShortIndexBuffer(int offset, int count, byte[] baseIndices = null, bool is32Bit = true)
             {
                 var indices = new ushort[count];
                 if (baseIndices == null)
@@ -289,9 +290,13 @@ namespace VL.Stride.Utils
                     }
                 }
 
-                var sizeOf = Utilities.SizeOf(indices);
+                var sizeOf = Unsafe.SizeOf<ushort>() * indices.Length;
                 var buffer = new byte[sizeOf];
-                Utilities.Write(buffer, indices, 0, indices.Length);
+                fixed (ushort* src = indices)
+                fixed (byte* dst = buffer)
+                {
+                    Unsafe.CopyBlockUnaligned(dst, src, (uint)buffer.Length);
+                }
                 return buffer;
             }
 
@@ -303,7 +308,7 @@ namespace VL.Stride.Utils
             /// <param name="baseIndices">A possible base index buffer</param>
             /// <param name="is32Bits">Stating if baseIndices is filled with 32 bits int</param>
             /// <returns>A new index buffer.</returns>
-            public static byte[] CreateIntIndexBuffer(int offset, int count, byte[] baseIndices = null, bool is32Bits = true)
+            public static unsafe byte[] CreateIntIndexBuffer(int offset, int count, byte[] baseIndices = null, bool is32Bits = true)
             {
                 var indices = new uint[count];
                 if (baseIndices == null)
@@ -324,10 +329,14 @@ namespace VL.Stride.Utils
                     }
                 }
 
-                var sizeOf = Utilities.SizeOf(indices);
-                var buffer = new byte[sizeOf];
-                Utilities.Write(buffer, indices, 0, indices.Length);
-                return buffer;
+            var sizeOf = Unsafe.SizeOf<uint>() * indices.Length;
+            var buffer = new byte[sizeOf];
+            fixed (uint* src = indices)
+            fixed (byte* dst = buffer)
+            {
+                Unsafe.CopyBlockUnaligned(dst, src, (uint)buffer.Length);
+            }
+            return buffer;
             }
 
             /// <summary>
@@ -345,6 +354,7 @@ namespace VL.Stride.Utils
             /// </summary>
             /// <param name="meshDrawDatas">The list of meshes to group.</param>
             /// <param name="can32BitIndex">A flag stating if 32 bit index buffers are allowed</param>
+            /// <param name="commandList"></param>
             /// <returns>The list of merged meshes.</returns>
             public static List<MeshDraw> GroupDrawData(this IList<MeshDraw> meshDrawDatas, bool can32BitIndex, CommandList commandList)
             {

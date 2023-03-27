@@ -357,7 +357,7 @@ namespace VL.Stride.Graphics
         /// <exception cref="System.ArgumentException">If the size is invalid</exception>
         public static int CalculateElementCount<TData>(this Buffer input) where TData : struct
         {
-            var dataStrideInBytes = Utilities.SizeOf<TData>();
+            var dataStrideInBytes = Unsafe.SizeOf<TData>();
 
             return input.SizeInBytes / dataStrideInBytes;
         }
@@ -372,7 +372,7 @@ namespace VL.Stride.Graphics
         /// <param name="doNotWait">if set to <c>true</c> this method will return immediately if the resource is still being used by the GPU for writing. Default is false</param>
         /// <param name="offsetInBytes"></param>
         /// <param name="lengthInBytes"></param>
-        /// <returns><c>true</c> if data was correctly retrieved, <c>false</c> if <see cref="doNotWait"/> flag was true and the resource is still being used by the GPU for writing.</returns>
+        /// <returns><c>true</c> if data was correctly retrieved, <c>false</c> if <paramref name="doNotWait"/> flag was true and the resource is still being used by the GPU for writing.</returns>
         /// <remarks>
         /// This method is only working when called from the main thread that is accessing the main <see cref="GraphicsDevice"/>.
         /// This method creates internally a stagging resource if this buffer is not already a stagging resouce, copies to it and map it to memory. Use method with explicit staging resource
@@ -410,20 +410,19 @@ namespace VL.Stride.Graphics
         public static bool GetData<TData>(this Buffer thisBuffer, CommandList commandList, Buffer staginBuffer, TData[] toData, bool doNotWait = false, int offsetInBytes = 0, int lengthInBytes = 0) where TData : struct
         {
             using (var pinner = new GCPinner(toData))
-                return thisBuffer.GetData(commandList, staginBuffer, new DataPointer(pinner.Pointer, toData.Length * Utilities.SizeOf<TData>()), doNotWait, offsetInBytes, lengthInBytes);
+                return thisBuffer.GetData(commandList, staginBuffer, new DataPointer(pinner.Pointer, toData.Length * Unsafe.SizeOf<TData>()), doNotWait, offsetInBytes, lengthInBytes);
         }
 
         /// <summary>
         /// Copies the content of this buffer to an array of data.
         /// </summary>
-        /// <typeparam name="TData">The type of the T data.</typeparam>
         /// <param name="thisBuffer"></param>
         /// <param name="commandList">The command list.</param>
         /// <param name="toData">The destination array to receive a copy of the buffer datas.</param>
         /// <param name="doNotWait">if set to <c>true</c> this method will return immediately if the resource is still being used by the GPU for writing. Default is false</param>
         /// <param name="offsetInBytes"></param>
         /// <param name="lengthInBytes"></param>
-        /// <returns><c>true</c> if data was correctly retrieved, <c>false</c> if <see cref="doNotWait"/> flag was true and the resource is still being used by the GPU for writing.</returns>
+        /// <returns><c>true</c> if data was correctly retrieved, <c>false</c> if <paramref name="doNotWait"/> flag was true and the resource is still being used by the GPU for writing.</returns>
         /// <remarks>
         /// This method is only working when called from the main thread that is accessing the main <see cref="GraphicsDevice"/>.
         /// This method creates internally a stagging resource if this buffer is not already a stagging resouce, copies to it and map it to memory. Use method with explicit staging resource
@@ -458,7 +457,7 @@ namespace VL.Stride.Graphics
         /// <remarks>
         /// This method is only working when called from the main thread that is accessing the main <see cref="GraphicsDevice"/>.
         /// </remarks>
-        public static bool GetData(this Buffer thisBuffer, CommandList commandList, Buffer stagingBuffer, DataPointer toData, bool doNotWait = false, int offsetInBytes = 0, int lengthInBytes = 0)
+        public static unsafe bool GetData(this Buffer thisBuffer, CommandList commandList, Buffer stagingBuffer, DataPointer toData, bool doNotWait = false, int offsetInBytes = 0, int lengthInBytes = 0)
         {
             // Check size validity of data to copy to
             if (toData.Pointer == IntPtr.Zero || toData.Size != thisBuffer.SizeInBytes)
@@ -474,7 +473,7 @@ namespace VL.Stride.Graphics
             {
                 if (mappedResource.DataBox.DataPointer != IntPtr.Zero)
                 {
-                    Utilities.CopyMemory(toData.Pointer, mappedResource.DataBox.DataPointer, toData.Size);
+                    Unsafe.CopyBlockUnaligned(toData.Pointer.ToPointer(), mappedResource.DataBox.DataPointer.ToPointer(), (uint)toData.Size);
                 }
                 else
                 {

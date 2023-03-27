@@ -43,9 +43,7 @@ namespace VL.Stride.Rendering.Models
         /// <returns>A geomtry3Sharp Vector3d</returns>
         public static Vector3d ToVector3d(Vector3 vector)
         {
-            if (vector != null)
-                return new Vector3d(vector.X, vector.Y, vector.Z);
-            return Vector3d.Zero;
+            return new Vector3d(vector.X, vector.Y, vector.Z);
         }
 
         /// <summary>
@@ -74,9 +72,7 @@ namespace VL.Stride.Rendering.Models
         /// <returns>A geomtry3Sharp Vector2d</returns>
         public static Vector2d ToVector2d(Vector2 vector)
         {
-            if (vector != null)
-                return new Vector2d(vector.X, vector.Y);
-            return Vector2d.Zero;
+            return new Vector2d(vector.X, vector.Y);
         }
 
         /// <summary>

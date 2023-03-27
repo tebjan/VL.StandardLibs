@@ -131,7 +131,7 @@ namespace VL.Stride.Lib
             });
 
             // Older code paths (like CEF) use obsolete IVLFactory.CreateService(NodeContext => IResourceProvider<Game>)
-            factory.RegisterService<NodeContext, IResourceProvider<Game>>(ctx => ctx.GetGameProvider());
+            factory.RegisterService<NodeContext, IResourceProvider<Game>>(ctx => ServiceRegistry.Current.GetGameProvider());
 
             services.RegisterProvider(game =>
             {
@@ -151,7 +151,7 @@ namespace VL.Stride.Lib
                 {
                     // For these message types the Windows Forms main loop will look for a Control with the given HWND.
                     // If it can't find one it will not do the Translate/Dispatch call -> the SDL windows never receive any text input.
-                    if (m.HWnd != null && Control.FromHandle(m.HWnd) is null)
+                    if (m.HWnd != IntPtr.Zero && Control.FromHandle(m.HWnd) is null)
                     {
                         // Is it a SDL window?
                         foreach (var window in StrideApp.Windows)

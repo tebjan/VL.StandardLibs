@@ -170,7 +170,7 @@ namespace VL.Skia
             Icon = Properties.Resources.QuadIcon;
             StartPosition = FormStartPosition.Manual;
 
-            FControl = new SkiaGLControl() { TouchEnabled = true };
+            FControl = new SkiaGLControl() { DirectCompositionEnabled = false /* Rendering works but GPU is still at 20%, so keep it disabled for now */ };
             FControl.Dock = DockStyle.Fill;
             FControl.OnRender += FControl_OnRender;
             Controls.Add(FControl);
@@ -241,14 +241,14 @@ namespace VL.Skia
             }
         }
 
-        private void FControl_OnRender(CallerInfo obj)
+        private void FControl_OnRender(CallerInfo callerInfo)
         {
             using var _ = FServiceRegistry?.MakeCurrentIfNone();
 
             try
             {
                 if (!FFirstRenderCall && Visible && HasValidLayer)
-                    Input?.Render(FControl.CallerInfo);
+                    Input?.Render(callerInfo);
                 FFirstRenderCall = false;
             }
             catch (Exception exception)
@@ -263,8 +263,10 @@ namespace VL.Skia
 
             try
             {
-                if (Visible && HasValidLayer)
-                    Input?.Notify(n, FControl.CallerInfo);
+                if (Visible && HasValidLayer && Input != null)
+                {
+                    n.Handled = Input.Notify(n, FControl.CallerInfo);
+                }
             }
             catch (Exception exception)
             {

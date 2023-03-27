@@ -4,11 +4,15 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Warning about x64 MSIL mismatch on Stride native assemblies. Ignore because we're the Windows only package. -->
+    <NoWarn>MSB3270</NoWarn>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VVVVInstallPath>$(MsBuildThisFileDirectory)..\..\..\vvvv\vvvv50\VVVV.Gamma\src\bin\Debug\net6.0-windows</VVVVInstallPath>
-    <PrivatePackageRepository>$(MsBuildThisFileDirectory)..\..\..\vvvv\vvvv50</PrivatePackageRepository>
+    <VVVVInstallPath>$(ProgramW6432)\vvvv\vvvv_gamma_2022.5.0-0618-gd9a3053447</VVVVInstallPath>
     <ThisPackageRepository>$(MsBuildThisFileDirectory)..\..</ThisPackageRepository>
   </PropertyGroup>
 
@@ -18,11 +22,13 @@
     <ProjectReference Include="..\..\VL.EditingFramework.Skia\src\VL.EditingFramework.Skia.csproj" />
     <ProjectReference Include="..\..\VL.EditingFramework\src\VL.EditingFramework.csproj" />
     <ProjectReference Include="..\..\VL.Fundamentals\src\VL.Fundamentals.csproj" />
+    <ProjectReference Include="..\..\VL.FuzzySearch\src\VL.FuzzySearch.csproj" />
     <ProjectReference Include="..\..\VL.ImGui.Skia\src\VL.ImGui.Skia.csproj" />
     <ProjectReference Include="..\..\VL.ImGui\src\VL.ImGui.csproj" />
     <ProjectReference Include="..\..\VL.Skia\src\VL.Skia.csproj" />
     <ProjectReference Include="..\..\VL.Stride.HDE\src\VL.Stride.HDE.csproj" />
     <ProjectReference Include="..\..\VL.Stride\src\VL.Stride.csproj" />
+    <ProjectReference Include="..\..\VL.Video.MediaFoundation\src\VL.Video.MediaFoundation.csproj" />
   </ItemGroup>
 
 </Project>

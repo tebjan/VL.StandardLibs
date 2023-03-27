@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), '$(MSBuildThisFileDirectory)../'))"
-          Condition="Exists($([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)../)))" />
-  <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
   
   <ItemGroup Condition="$(VLPackageBasePath) != ''">
     <Content Include="$(VLPackageBasePath)*.vl" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -15,6 +7,10 @@
     <Content Include="$(VLPackageBasePath)help\**" PackagePath="help\%(RecursiveDir)%(Filename)%(Extension)" LinkBase="help" />
     <Content Include="$(VLPackageBasePath)vvvv\**" PackagePath="vvvv\%(RecursiveDir)%(Filename)%(Extension)" LinkBase="vvvv" />
     <Content Remove="$(VLPackageBasePath)**\*.vl.dll" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsPackable)' != 'false' ">
+    <None Include="$(MsBuildThisFileDirectory)build\nugeticon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <!-- Workaround to specifiy aliases for PackageReference - taken from https://github.com/NuGet/Home/issues/4989 -->
@@ -105,4 +101,14 @@
       <Content Remove="@(_StrideDependencyContent)" Condition=" '$(StrideIsExecutable)' == '' or '$(StrideIsExecutable)' == 'false' " />
     </ItemGroup>
   </Target>
+
+  <!-- Remove glslLangValidator.exe (stemming from Stride.Shaders.Compiler) from our packages -->
+  <Target Name="_RemoveGlslLangValidatorFromPackage" BeforeTargets="_GetPackageFiles">
+    <ItemGroup>
+      <Content Condition="'%(Content.Filename)' == 'glslangValidator'">
+        <Pack>false</Pack>
+      </Content>
+    </ItemGroup>
+  </Target>
+  
 </Project>

@@ -52,7 +52,8 @@ namespace VL.Stride.Graphics
         /// See the unmanaged documentation about Map/UnMap for usage and restrictions.
         /// </remarks>
         /// <returns>The GPU buffer.</returns>
-        public static unsafe Texture SetData<TData>(this Texture texture, CommandList commandList, Spread<TData> fromData, int arraySlice, int mipSlice, ResourceRegion? region) where TData : struct
+        public static unsafe Texture SetData<TData>(this Texture texture, CommandList commandList, Spread<TData> fromData, int arraySlice, int mipSlice, ResourceRegion? region) 
+            where TData : unmanaged
         {
             var immutableArray = fromData._array;
             var array = Unsafe.As<ImmutableArray<TData>, TData[]>(ref immutableArray);
@@ -90,12 +91,12 @@ namespace VL.Stride.Graphics
         /// </summary>
         public static unsafe Texture Load(GraphicsDevice device, string file, TextureFlags textureFlags = TextureFlags.ShaderResource, GraphicsResourceUsage usage = GraphicsResourceUsage.Immutable, bool loadAsSRGB = false)
         {
-            using var src = File.OpenRead(file);
+            const int bufferSize = 1024 * 1024 * 8;
+            using var src = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan);
             var ptr = Utilities.AllocateMemory((int)src.Length);
-            using var dst = new UnmanagedMemoryStream((byte*)ptr.ToPointer(), 0, (int)src.Length, FileAccess.ReadWrite);
-            src.CopyTo(dst);
-            var dataBuffer = new DataPointer(ptr, (int)dst.Length);
-            using var image = Image.Load(dataBuffer, makeACopy: false, loadAsSRGB: loadAsSRGB);
+            using var dst = new UnmanagedMemoryStream((byte*)ptr, 0, (int)src.Length, FileAccess.ReadWrite);
+            src.CopyTo(dst, bufferSize);
+            using var image = Image.Load(new IntPtr(ptr), (int)dst.Length, makeACopy: false, loadAsSRGB: loadAsSRGB);
             return Texture.New(device, image, textureFlags, usage);
         }
 

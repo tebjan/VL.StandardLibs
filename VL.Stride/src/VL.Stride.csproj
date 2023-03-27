@@ -4,17 +4,19 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputPath>..\lib</OutputPath>
 
-    <PackageId>$(AssemblyName)</PackageId>
+    <!-- Warning about x64 MSIL mismatch on Stride native assemblies. Ignore because we're the Windows only package. -->
+    <NoWarn>$(NoWarn)MSB3270</NoWarn>
+
     <Description>A 3d graphics rendering library</Description>
     <PackageTags>3d, graphics, renderer, gpu, vr, spout, image, texture, filter, textureplayer, video, model, material, shader, touch, scenewindow, renderwindow, texturewindow</PackageTags>
-    <Authors>vvvv and open-source contributors</Authors>
-    <Company>vvvv</Company>
 
     <!-- Ensures dependencies are present https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support -->
     <EnableDynamicLoading>true</EnableDynamicLoading>
 
     <!-- Generates Stride asset database -->
     <StrideIsExecutable>true</StrideIsExecutable>
+
+    <VLPackageBasePath>..\</VLPackageBasePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +25,4 @@
     <ProjectReference Include="..\..\VL.Stride.Runtime\src\VL.Stride.Runtime.csproj" />
   </ItemGroup>
   
-  <ItemGroup>
-    <None Include="..\*.vl" Pack="true" PackagePath=" " />
-  </ItemGroup>
 </Project>
