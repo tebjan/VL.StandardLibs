@@ -72,7 +72,7 @@ namespace VL.Stride.Rendering
         }
 
         public static void GenerateTangentsIndexed<TVertex>(TVertex[] vertices, int[] indices, int numberOfTextureCoordinates,
-            out byte[] vertexBuffer, out VertexDeclaration vertexLayout, out ushort[] indicesShort, out bool useIndicesShort) where TVertex : struct, IVertex
+            out byte[] vertexBuffer, out VertexDeclaration vertexLayout, out ushort[] indicesShort, out bool useIndicesShort) where TVertex : unmanaged, IVertex
         {
             if (vertices?.Length == 0)
             {

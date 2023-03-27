@@ -9,6 +9,7 @@ using Stride.Shaders.Compiler;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
@@ -51,7 +52,7 @@ namespace VL.Stride.Core
 
     public sealed class Initialization : AssemblyInitializer<Initialization>
     {
-		public static string GetPathToAssetDatabase()
+        public static string GetPathToAssetDatabase()
         {
             var thisDirectory = Path.GetDirectoryName(typeof(Initialization).Assembly.Location);
             var dataDir = Path.Combine(thisDirectory, "data");
