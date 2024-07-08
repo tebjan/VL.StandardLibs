@@ -1,0 +1,38 @@
+shader VertexStructs
+{
+    struct Pos3Norm3
+    {
+        float3 Pos;
+        float3 Normal;
+    };
+
+    struct Pos4Norm4
+    {
+        float4 Pos;
+        float4 Normal;
+    };
+
+    struct Pos3Norm3Tex2
+    {
+        float3 Pos;
+        float3 Normal;
+        float2 TexCoord;
+    };
+
+    struct Pos3Norm3Tex2Tan4
+    {
+        float3 Pos;
+        float3 Normal;
+        float2 TexCoord;
+        float4 Tangent;
+    };
+
+    struct Pos3Norm3Tex2Tan3BiTan3
+    {
+        float3 Pos;
+        float3 Normal;
+        float2 TexCoord;
+        float3 Tangent;
+        float3 BiTangent;
+    };
+};

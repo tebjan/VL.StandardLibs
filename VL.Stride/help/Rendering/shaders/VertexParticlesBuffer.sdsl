@@ -1,0 +1,6 @@
+shader VertexParticlesBuffer: VertexParticleStruct
+{
+    // Read/write Particle Buffer for compute shader
+    RWStructuredBuffer<VertexParticle> Particles;
+    int ParticleCount;
+};

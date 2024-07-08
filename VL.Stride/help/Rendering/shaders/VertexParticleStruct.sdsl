@@ -1,0 +1,10 @@
+shader VertexParticleStruct
+{
+    struct VertexParticle
+    {
+        float3 Pos;
+        float3 Velocity;
+        float Lifetime;
+        float Age;
+    };
+};

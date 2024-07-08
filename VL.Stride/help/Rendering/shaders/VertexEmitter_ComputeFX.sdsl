@@ -1,0 +1,48 @@
+[Summary("")]
+shader VertexEmitter_ComputeFX : ComputeShaderBase, VertexParticlesBuffer, VertexStructs, Global
+{
+    // Random value buffer
+    StructuredBuffer<float4> RandomValues;
+    int RandomValueCount;
+
+    // Vertex Buffer
+	StructuredBuffer<Pos3Norm3Tex2Tan4> Vertices;
+    int VertexCount;
+
+    override void Compute()
+    {
+        uint index = streams.DispatchThreadId.x;
+
+        if (index >= ParticleCount)
+            return;
+
+        // Get particle
+        VertexParticle particle = Particles[index];
+
+        if (particle.Age >= particle.Lifetime)
+        {
+            // Reset particle
+
+            // Get random value
+            uint randomIndex = floor(index + Time);
+            float4 randomValue = RandomValues[index % RandomValueCount];
+
+            particle.Age = 0.0f;
+            particle.Lifetime = (1 + randomValue.w) * 5;
+
+            // Get vertex for emit
+            Pos3Norm3Tex2Tan4 vertex = Vertices[index % VertexCount];
+
+            particle.Pos = vertex.Pos;
+            particle.Velocity = (vertex.Normal * 0.5 + randomValue.xyz * 0.01) * 0.001f;
+        }
+        else
+        {
+            // Update particle
+            particle.Age += TimeStep;
+            particle.Pos += particle.Velocity;
+        }
+    
+        Particles[index] = particle;
+    }
+};
