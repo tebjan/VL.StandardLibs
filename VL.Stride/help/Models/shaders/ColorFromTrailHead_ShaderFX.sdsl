@@ -1,4 +1,4 @@
-shader ColorFromTrailHead_ShaderFX : ComputeFloat4, ShaderBaseStream, TrailHeadStruct
+shader ColorFromTrailHead_ShaderFX : ComputeColor, ShaderBaseStream, TrailHeadStruct
 {
     rgroup PerMaterial
     {
