@@ -41,6 +41,8 @@ namespace VL.Stride
 
         public bool Fragmented => true;
 
+        public bool IncludeOnlyAttributedMembers { get; set; } = true;
+
         public IReadOnlyList<IVLPinDescription> Inputs
         {
             get
@@ -52,7 +54,7 @@ namespace VL.Stride
                     var categoryOrdering = typeof(TInstance).GetCustomAttributes<CategoryOrderAttribute>()
                         .ToDictionary(a => a.Name, a => a.Order);
 
-                    var properties = typeof(TInstance).GetStrideProperties()
+                    var properties = typeof(TInstance).GetStrideProperties(IncludeOnlyAttributedMembers)
                         .GroupBy(p => p.Category)
                         .OrderBy(g => g.Key != null ? categoryOrdering.ValueOrDefault(g.Key, 0) : 0)
                         .SelectMany(g => g.OrderBy(p => p.Order).ThenBy(p => p.Name));

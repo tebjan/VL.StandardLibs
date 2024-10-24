@@ -86,7 +86,7 @@ namespace VL.Stride
                 throw new NotImplementedException();
         }
 
-        public static IEnumerable<(MemberInfo Property, int? Order, string Name, string Category)> GetStrideProperties(this Type type)
+        public static IEnumerable<(MemberInfo Property, int? Order, string Name, string Category)> GetStrideProperties(this Type type, bool includeOnlyAttributedMembers = true)
         {
             return type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => p.GetMethod != null && p.GetMethod.IsPublic && ((p.SetMethod != null && p.SetMethod.IsPublic) || !p.PropertyType.IsValueType))
@@ -102,12 +102,16 @@ namespace VL.Stride
                     if (display != null && !display.Browsable)
                         return default;
 
-                    // At least one of the following attributes must be set
                     var dataMember = p.GetCustomAttribute<DataMemberAttribute>();
-                    var dataMemberRange = p.GetCustomAttribute<DataMemberRangeAttribute>();
-                    var customSerializer = p.GetCustomAttribute<DataMemberCustomSerializerAttribute>();
-                    if (display is null && dataMember is null && dataMemberRange is null && customSerializer is null)
-                        return default;
+
+                    if (includeOnlyAttributedMembers)
+                    {
+                        // Check if the following attributes are be set
+                        var dataMemberRange = p.GetCustomAttribute<DataMemberRangeAttribute>();
+                        var customSerializer = p.GetCustomAttribute<DataMemberCustomSerializerAttribute>();
+                        if (display is null && dataMember is null && dataMemberRange is null && customSerializer is null)
+                            return default; 
+                    }
 
                     var name = display?.Name?.UpperCaseAfterSpace() ?? p.Name.InsertSpaces();
                     var order = dataMember?.Order;

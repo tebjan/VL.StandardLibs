@@ -20,6 +20,8 @@ using Stride.Rendering.Images;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Shadows;
 using Stride.Rendering.SubsurfaceScattering;
+using Stride.Rendering.Voxels;
+using Stride.Rendering.Voxels.Debug;
 using Stride.VirtualReality;
 using VL.Lib.Mathematics;
 
@@ -134,6 +136,16 @@ namespace VL.Stride.Rendering
         /// Light shafts effect
         /// </summary>
         public LightShafts LightShafts { get; set; }
+
+        /// <summary>
+        /// The voxel renderer.
+        /// </summary>
+        public IVoxelRenderer VoxelRenderer { get; set; }
+
+        /// <summary>
+        /// Voxel debug visualization.
+        /// </summary>
+        public VoxelDebug VoxelVisualization { get; set; }
 
         /// <summary>
         /// Virtual Reality related settings
@@ -350,6 +362,8 @@ namespace VL.Stride.Rendering
         protected override unsafe void CollectCore(RenderContext context)
         {
             using var _ = Profiler.Begin(CollectCoreKey);
+
+            VoxelRenderer?.Collect(Context, shadowMapRenderer);
 
             var camera = context.GetCurrentCamera();
 
@@ -728,6 +742,13 @@ namespace VL.Stride.Rendering
                     drawContext.Resolver.ReleaseDepthStenctilAsShaderResource(depthStencilSRV);
                 }
             }
+
+            // Voxel Debug if enabled
+            if (VoxelVisualization != null)
+            {
+                VoxelVisualization.VoxelRenderer = VoxelRenderer;
+                VoxelVisualization.Draw(drawContext, viewOutputTarget);
+            }
         }
 
         protected virtual void DrawPostFXOnly(RenderContext context, RenderDrawContext drawContext)
@@ -790,6 +811,14 @@ namespace VL.Stride.Rendering
         protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
         {
             using var _ = Profiler.Begin(DrawCoreKey);
+
+            if (VoxelRenderer != null)
+            {
+                using (drawContext.PushRenderTargetsAndRestore())
+                {
+                    VoxelRenderer.Draw(drawContext, shadowMapRenderer);
+                }
+            }
 
             var viewport = drawContext.CommandList.Viewport;
 

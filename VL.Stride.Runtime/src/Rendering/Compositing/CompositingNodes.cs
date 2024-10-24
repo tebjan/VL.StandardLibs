@@ -13,6 +13,8 @@ using Stride.Rendering.Shadows;
 using Stride.Rendering.Sprites;
 using Stride.Rendering.SubsurfaceScattering;
 using Stride.Rendering.UI;
+using Stride.Rendering.Voxels;
+using Stride.Rendering.Voxels.VoxelGI;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -173,6 +175,9 @@ namespace VL.Stride.Rendering.Compositing
                     s.FilterRadius = y.FilterRadius;
                 })
                 .AddCachedInput(nameof(VLForwardRenderer.BindDepthAsResourceDuringTransparentRendering), x => x.BindDepthAsResourceDuringTransparentRendering, (x, v) => x.BindDepthAsResourceDuringTransparentRendering = v)
+                .AddCachedInput(nameof(VLForwardRenderer.BindOpaqueAsResourceDuringTransparentRendering), x => x.BindOpaqueAsResourceDuringTransparentRendering, (x, v) => x.BindOpaqueAsResourceDuringTransparentRendering = v)
+                .AddCachedInput(nameof(VLForwardRenderer.VoxelRenderer), x => x.VoxelRenderer, (x, v) => x.VoxelRenderer = v)
+                .AddCachedInput(nameof(VLForwardRenderer.VoxelVisualization), x => x.VoxelVisualization, (x, v) => x.VoxelVisualization = v)
                 .AddEnabledPin();
 
             yield return new StrideNodeDesc<SubsurfaceScatteringBlur>(nodeFactory, category: compositionCategory);
@@ -286,6 +291,7 @@ namespace VL.Stride.Rendering.Compositing
             yield return new StrideNodeDesc<InstancingRenderFeature>(nodeFactory, category: renderFeaturesCategory);
             yield return new StrideNodeDesc<SubsurfaceScatteringRenderFeature>(nodeFactory, category: renderFeaturesCategory);
             yield return new StrideNodeDesc<VLEffectRenderFeature>(nodeFactory, category: renderFeaturesCategory);
+            yield return new StrideNodeDesc<VoxelRenderFeature>(nodeFactory, category: renderFeaturesCategory);
 
             yield return nodeFactory.NewNode<ForwardLightingRenderFeature>(category: renderFeaturesCategory)
                 .AddCachedListInput(nameof(ForwardLightingRenderFeature.LightRenderers), x => x.LightRenderers)
@@ -302,6 +308,10 @@ namespace VL.Stride.Rendering.Compositing
             yield return nodeFactory.NewNode<WireframePipelineProcessor>(category: pipelineProcessorsCategory)
                 .AddCachedInput(nameof(WireframePipelineProcessor.RenderStage), x => x.RenderStage, (x, v) => x.RenderStage = v);
 
+            yield return nodeFactory.NewNode<VoxelPipelineProcessor>(category: pipelineProcessorsCategory)
+                .AddCachedInput(nameof(VoxelPipelineProcessor.VoxelRenderStage), x => x.VoxelRenderStage, (x, v) => x.VoxelRenderStage = v)
+                .AddCachedInput(nameof(VoxelPipelineProcessor.DepthClipping), x => x.DepthClipping, (x, v) => x.DepthClipping = v);
+
             // Light renderers - make enum
             var lightsCategory = $"{renderingCategoryAdvanced}.Light";
             yield return new StrideNodeDesc<LightAmbientRenderer>(nodeFactory, category: lightsCategory);
@@ -311,6 +321,10 @@ namespace VL.Stride.Rendering.Compositing
             yield return new StrideNodeDesc<LightSpotGroupRenderer>(nodeFactory, category: lightsCategory);
             yield return new StrideNodeDesc<LightClusteredPointSpotGroupRenderer>(nodeFactory, category: lightsCategory);
             yield return new StrideNodeDesc<LightProbeRenderer>(nodeFactory, category: lightsCategory);
+            yield return new StrideNodeDesc<LightVoxelRenderer>(nodeFactory, category: lightsCategory);
+
+            yield return nodeFactory.NewNode<VoxelRenderer>(category: renderingCategoryAdvanced)
+                .AddCachedListInput(nameof(VoxelRenderer.VoxelStages), x => x.VoxelStages);
 
             // Shadow map renderers
             var shadowsCategory = $"{renderingCategoryAdvanced}.Shadow";

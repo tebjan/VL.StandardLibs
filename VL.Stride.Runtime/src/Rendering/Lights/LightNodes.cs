@@ -1,8 +1,15 @@
 ﻿using Stride.Core.Mathematics;
+using Stride.Graphics;
 using Stride.Rendering.Colors;
+using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
+using Stride.Rendering.Voxels;
+using Stride.Rendering.Voxels.Debug;
+using Stride.Rendering.Voxels.VoxelGI;
+using System;
 using System.Collections.Generic;
 using VL.Core;
+using VL.Lib.Adaptive;
 
 namespace VL.Stride.Rendering.Lights
 {
@@ -39,6 +46,84 @@ namespace VL.Stride.Rendering.Lights
                 .AddCachedInput(nameof(LightSpot.ProjectionPlaneDistance), x => x.ProjectionPlaneDistance, (x, v) => x.ProjectionPlaneDistance = v, 1f)
                 .AddCachedInput(nameof(LightSpot.FlipMode), x => x.FlipMode, (x, v) => x.FlipMode = v);
 
+            // Voxel light
+            yield return NewEnvironmentLightNode<LightVoxel>(factory, lightTypesCategory)
+                .AddOptimizedInput(nameof(LightVoxel.Volume), x => x.Volume, (x, v) => x.Volume = v)
+                .AddOptimizedInput(nameof(LightVoxel.AttributeIndex), x => x.AttributeIndex, (x, v) => x.AttributeIndex = v)
+                .AddOptimizedInput(nameof(LightVoxel.DiffuseMarcher), x => x.DiffuseMarcher, (x, v) => x.DiffuseMarcher = v)
+                .AddOptimizedInput(nameof(LightVoxel.SpecularMarcher), x => x.SpecularMarcher, (x, v) => x.SpecularMarcher = v)
+                .AddOptimizedInput(nameof(LightVoxel.BounceIntensityScale), x => x.BounceIntensityScale, (x, v) => x.BounceIntensityScale = v)
+                .AddOptimizedInput(nameof(LightVoxel.SpecularIntensityScale), x => x.SpecularIntensityScale, (x, v) => x.SpecularIntensityScale = v);
+
+            // Voxel marcher set
+            var lightVoxelMarcherCategory = $"{lightTypesCategory}.VoxelMarcher";
+            yield return NewVoxelMarchSetNode<VoxelMarchSetHemisphere6>(factory, lightVoxelMarcherCategory);
+            yield return NewVoxelMarchSetNode<VoxelMarchSetHemisphere12>(factory, lightVoxelMarcherCategory);
+            yield return factory.NewNode<VoxelMarchSetRandomHemisphere>(category: lightVoxelMarcherCategory, copyOnWrite: false)
+                .AddCachedInput(nameof(VoxelMarchSetRandomHemisphere.Marcher), x => x.Marcher, (x, v) => x.Marcher = v)
+                .AddOptimizedInput(nameof(VoxelMarchSetRandomHemisphere.Count), x => x.Count, (x, v) => x.Count = v, 6)
+                .AddOptimizedInput(nameof(VoxelMarchSetRandomHemisphere.AnimateNoise), x => x.AnimateNoise, (x, v) => x.AnimateNoise = v, false);
+
+            // Voxel marchers
+            yield return factory.NewNode<VoxelMarchBeam>(category: lightVoxelMarcherCategory, copyOnWrite: false)
+                .AddOptimizedInput(nameof(VoxelMarchBeam.Steps), x => x.Steps, (x, v) => x.Steps = v, 9)
+                .AddOptimizedInput(nameof(VoxelMarchBeam.StepScale), x => x.StepScale, (x, v) => x.StepScale = v, 1.0f)
+                .AddOptimizedInput(nameof(VoxelMarchBeam.BeamDiameter), x => x.BeamDiameter, (x, v) => x.BeamDiameter = v, 1.0f);
+
+            yield return new StrideNodeDesc<VoxelMarchCone>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+            yield return new StrideNodeDesc<VoxelMarchConePerMipmap>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+
+            // Voxel debug
+            yield return new StrideNodeDesc<VoxelDebug>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+
+            // Voxel volume
+            yield return new StrideNodeDesc<VoxelVolumeComponent>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+
+            // Voxelization methods
+            yield return factory.NewNode<VoxelizationMethodSingleAxis>(category: lightVoxelMarcherCategory, copyOnWrite: false)
+                .AddOptimizedInput(nameof(VoxelizationMethodSingleAxis.VoxelizationAxis), x => x.VoxelizationAxis, (x, v) => x.VoxelizationAxis = v, VoxelizationMethodSingleAxis.Axis.Y);
+
+            yield return factory.NewNode<VoxelizationMethodDominantAxis>(category: lightVoxelMarcherCategory, copyOnWrite: false)
+                .AddOptimizedInput(nameof(VoxelizationMethodDominantAxis.MultisampleCount), x => x.MultisampleCount, (x, v) => x.MultisampleCount = v, MultisampleCount.X8);
+
+            yield return factory.NewNode<VoxelizationMethodTriAxis>(category: lightVoxelMarcherCategory, copyOnWrite: false)
+                .AddOptimizedInput(nameof(VoxelizationMethodTriAxis.MultisampleCount), x => x.MultisampleCount, (x, v) => x.MultisampleCount = v, MultisampleCount.X8);
+
+            // Voxel storage
+            yield return new StrideNodeDesc<VoxelStorageClipmaps>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Voxel Emission and Opacity attribute
+            yield return new StrideNodeDesc<VoxelAttributeEmissionOpacity>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            
+            // Voxel layout
+            yield return new StrideNodeDesc<VoxelLayoutAnisotropic>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelLayoutAnisotropicPaired>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelLayoutIsotropic>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Voxel modfiers
+            yield return new StrideNodeDesc<VoxelModifierEmissionOpacityAntiAliasing>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelModifierEmissionOpacityOpacify>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelModifierEmissionOpacitySolidify>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Storage method
+            yield return new StrideNodeDesc<VoxelStorageMethodIndirect>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Packers
+            yield return new StrideNodeDesc<VoxelFragmentPackFloat16>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelFragmentPackFloat32>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelFragmentPackFloatR11G11B10>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Writers
+            yield return new StrideNodeDesc<VoxelBufferWriteAssign>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+            yield return new StrideNodeDesc<VoxelBufferWriteMax>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false, IncludeOnlyAttributedMembers = false };
+
+            // Other attributes
+            yield return new StrideNodeDesc<VoxelAttributeDirectionalCoverage>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+            yield return new StrideNodeDesc<VoxelAttributeSolidity>(factory, category: lightVoxelMarcherCategory) { CopyOnWrite = false };
+
+            // TODO: voxel visualization
+
+            // Shadow maps
             yield return NewShadowNode<LightDirectionalShadowMap>(factory, shadowMapsCategory)
                 .AddCachedInput(nameof(LightDirectionalShadowMap.CascadeCount), x => x.CascadeCount, (x, v) => x.CascadeCount = v, LightShadowMapCascadeCount.FourCascades)
                 .AddCachedInput(nameof(LightDirectionalShadowMap.DepthRange), x => x.DepthRange, (x, v) =>
@@ -80,6 +165,14 @@ namespace VL.Stride.Rendering.Lights
 
             yield return factory.NewNode<LightDirectionalShadowMap.PartitionLogarithmic>(category: shadowMapsCategory)
                 .AddCachedInput(nameof(LightDirectionalShadowMap.PartitionLogarithmic.PSSMFactor), x => x.PSSMFactor, (x, v) => x.PSSMFactor = v, 0.5f);
+        }
+
+        static CustomNodeDesc<TVoxelMarchSet> NewVoxelMarchSetNode<TVoxelMarchSet>(IVLNodeDescriptionFactory factory, string category)
+            where TVoxelMarchSet : VoxelMarchSetBase, new()
+        {
+            return factory.NewNode<TVoxelMarchSet>(category: category, copyOnWrite: false)
+                .AddCachedInput(nameof(VoxelMarchSetBase.Marcher), x => x.Marcher, (x, v) => x.Marcher = v)
+                .AddOptimizedInput(nameof(VoxelMarchSetBase.Offset), x => x.Offset, (x, v) => x.Offset = v);
         }
 
         static CustomNodeDesc<TLight> NewEnvironmentLightNode<TLight>(IVLNodeDescriptionFactory factory, string category)
