@@ -73,7 +73,8 @@
     <PackageVersion Include="Stride.TextureConverter" Version="$(StrideVersion)" />
     <PackageVersion Include="Stride.UI" Version="$(StrideVersion)" />
     <PackageVersion Include="Stride.Video" Version="$(StrideVersion)" />
-    <PackageVersion Include="Stride.VirtualReality" Version="$(StrideVersion)" />
+	<PackageVersion Include="Stride.VirtualReality" Version="$(StrideVersion)" />
+	<PackageVersion Include="Stride.Voxels" Version="$(StrideVersion)" />
     <PackageVersion Include="Stride.Graphics.RenderDocPlugin" Version="$(StrideVersion)" />
     <PackageVersion Include="System.Text.Json" Version="8.0.5" />
     <PackageVersion Include="TeamCity.VSTest.TestAdapter" Version="1.0.38" />

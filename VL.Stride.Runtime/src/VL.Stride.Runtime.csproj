@@ -76,9 +76,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Effects\Common\WireframeShader.sdsl.cs">
-      <DependentUpon>WireframeShader.sdsl</DependentUpon>
-    </Compile>
     <Compile Update="Effects\ComputeFX\ComputeFXEffect.sdfx.cs">
       <DesignTime>True</DesignTime>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -195,12 +192,6 @@
     </None>
     <None Update="Effects\TextureFX\TextureFXGraphEffect - Kopie.sdfx">
       <LastGenOutput>TextureFXGraphEffect - Kopie.sdfx.cs</LastGenOutput>
-    </None>
-    <None Update="Effects\ShaderFX\Utils\Convert_RGBAToVector4_ShaderFX.sdsl">
-      <LastGenOutput>%(Filename).sdsl.cs</LastGenOutput>
-    </None>
-    <None Update="Effects\ShaderFX\Utils\Convert_Vector4ToRGBA_ShaderFX.sdsl">
-      <LastGenOutput>%(Filename).sdsl.cs</LastGenOutput>
     </None>
     <None Update="Effects\TextureFX\TextureFXGraphEffect.sdfx">
       <LastGenOutput>TextureFXGraphEffect.sdfx.cs</LastGenOutput>
