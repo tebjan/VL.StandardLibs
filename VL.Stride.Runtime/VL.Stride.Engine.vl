@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="UFzEbZy7D3GNY8xnLUU17p" LanguageVersion="2024.6.7-0199-gdeb6aa1e6c" Version="0.128">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="UFzEbZy7D3GNY8xnLUU17p" LanguageVersion="2024.6.7-0211-g4c07a0803b" Version="0.128">
   <NugetDependency Id="EKAeSpl0TUSO67sl9VuE19" Location="VL.CoreLib" Version="2021.4.12-1361-g53776bfdff" />
   <Patch Id="M3fVx2jjvOSLPGL4EJGFf9">
     <Canvas Id="JugVUmEZoitO7m1cCzT7W3" DefaultCategory="Stride" CanvasType="FullCategory">
@@ -7175,6 +7175,11 @@
               <p:NodeReference LastCategoryFullName="Primitive" LastDependency="builtin">
                 <Choice Kind="ClassDefinition" Name="Class" />
               </p:NodeReference>
+              <p:Interfaces>
+                <TypeReference LastCategoryFullName="Stride.Utils" LastDependency="VL.Stride.Engine.vl">
+                  <Choice Kind="MutableInterfaceType" Name="IEditMode" />
+                </TypeReference>
+              </p:Interfaces>
               <Patch Id="FMELZOhuHKgMjrBP8MzTQQ">
                 <Canvas Id="BaInQd5XuP6OOB8ZuKquNH" CanvasType="Group">
                   <Pad Id="A5ucdEaX6weOolgmnFutlA" SlotId="Vewa5bHEmSeLnkU6liZCqd" Bounds="254,131" />
@@ -7798,11 +7803,6 @@
                 <Link Id="DxI5yprIwFFMLsrPwDo2xZ" Ids="GyJAgENyqgjLtELCyGOHdT,P9wwOP5aIX0M9kBsCO7bWh" />
                 <Link Id="TVYGnbFjpQtMuNBB2PmgBt" Ids="L2h7j7Q4FdPNMGyxIMfe6x,TAQSYXnjk2xOY0p9e4hamm" />
               </Patch>
-              <p:Interfaces>
-                <TypeReference LastCategoryFullName="Stride.Utils" LastDependency="VL.Stride.Engine.vl">
-                  <Choice Kind="MutableInterfaceType" Name="IEditMode" />
-                </TypeReference>
-              </p:Interfaces>
             </Node>
             <!--
 
@@ -14226,6 +14226,11 @@
             <Choice Kind="ClassDefinition" Name="Class" />
             <FullNameCategoryReference ID="Primitive" />
           </p:NodeReference>
+          <p:Interfaces>
+            <TypeReference LastCategoryFullName="Stride.Utils" LastDependency="VL.Stride.Engine.vl">
+              <Choice Kind="MutableInterfaceType" Name="IPatchedEntity" />
+            </TypeReference>
+          </p:Interfaces>
           <Patch Id="Li9e0mtsPNyLZK7tkRPMbp">
             <Canvas Id="TiqfYta6dRJMOpLUx6aDDc" CanvasType="Group">
               <Node Bounds="304,1003,213,19" Id="EPYNWA4igaJP8w0mK565ym">
@@ -14661,11 +14666,6 @@
             <Link Id="Bl7HMfUFYl4MBdOFDCU0U5" Ids="VfYCqLOtohLMg8sSi8dvZc,RZkEgnrjCKVLBwPZO3ZGkf" />
             <Link Id="SShrcGIFFpoPkukKVXQhfe" Ids="L1fJwbZanshNSllhDKQT2y,LdM7TFr168wMrjuMUrMcEZ" />
           </Patch>
-          <p:Interfaces>
-            <TypeReference LastCategoryFullName="Stride.Utils" LastDependency="VL.Stride.Engine.vl">
-              <Choice Kind="MutableInterfaceType" Name="IPatchedEntity" />
-            </TypeReference>
-          </p:Interfaces>
         </Node>
         <!--
 
@@ -20027,6 +20027,8 @@
                 <Pin Id="M9cOpO9VJSaOBAff6vHKSx" Name="Viewport Settings" Kind="InputPin" />
                 <Pin Id="Q4Z6rxg3YxiQZUMi7OV3tf" Name="Subsurface Scattering Blur Settings" Kind="InputPin" />
                 <Pin Id="IO3HuIYHKgeLhW2V6yqfZQ" Name="Bind Depth As Resource During Transparent Rendering" Kind="InputPin" />
+                <Pin Id="NRe9q0WAWQuLqpRtrrvkzC" Name="Bind Opaque As Resource During Transparent Rendering" Kind="InputPin" />
+                <Pin Id="SkAQDb9UV3UMsINjWDLOZ1" Name="Debug Voxels" Kind="InputPin" />
                 <Pin Id="LlbJ6VqTemuMWTmclvQ7Zd" Name="Camera" Kind="InputPin" />
                 <Pin Id="DAzfGwPgeQHNldq47jFMF0" Name="Clear" Kind="InputPin" />
                 <Pin Id="SK0iV2VRenXP2XRGOkp7RR" Name="Clear Color" Kind="InputPin" />
@@ -20037,8 +20039,6 @@
                 <Pin Id="FS3UWIUMJkKMnbjG8ObtDv" Name="Additional Scene Renderers" Kind="InputPin" />
                 <Pin Id="AgMr6VwuUpgL3Gs8g5AvDm" Name="Output" Kind="OutputPin" />
                 <Pin Id="QNWghE2fUPqLZ7ASM6GrUd" Name="Enable Camera" Kind="InputPin" />
-                <Pin Id="NRe9q0WAWQuLqpRtrrvkzC" Name="Bind Opaque As Resource During Transparent Rendering" Kind="InputPin" />
-                <Pin Id="SkAQDb9UV3UMsINjWDLOZ1" Name="Debug Voxels" Kind="InputPin" />
               </Node>
               <Node Bounds="374,284,431,91" Id="TiOpPbcjTzgLRtz0kdIlW1">
                 <p:NodeReference LastCategoryFullName="Primitive" LastDependency="Builtin">
@@ -20126,7 +20126,7 @@
               <ControlPoint Id="CN60OQ1R5U9LuCRL5sbnCN" Bounds="812,553" />
               <ControlPoint Id="CptoBKgxDXzORWoXqlEE4i" Bounds="417,566" />
               <ControlPoint Id="LbJv4pajAFxPTYO1W9dMJt" Bounds="799,526" />
-              <ControlPoint Id="R4CzzMIBOkfOBTxLz5fhV7" Bounds="853,654" />
+              <ControlPoint Id="R4CzzMIBOkfOBTxLz5fhV7" Bounds="947,623" />
               <ControlPoint Id="VwYqziWHECXMoBT9yG6MpI" Bounds="852,648" />
               <Node Bounds="545,510,92,19" Id="NKRiJyH5d6cLYJvzrUZCI8">
                 <p:NodeReference LastCategoryFullName="Stride.Input" LastDependency="VL.Stride.Engine.vl">
@@ -21237,14 +21237,14 @@
               <Pad Id="MlOjUW3R9n9NHUTWbw9olE" SlotId="K4G6z8s426fOQec5jz6D5P" Bounds="1819,336" />
               <Pad Id="RcucztgO7TLP5skyd8jUOR" SlotId="Tj6JnjWdU0MNuSLbm5AtHg" Bounds="2047,334" />
               <Pad Id="LluUnDxFenTLH2Xqz5Jyy4" SlotId="IThGUGiGp3jPjPvJwUeGv5" Bounds="469,627" />
-              <ControlPoint Id="Dd1tRJbOvLCOACpse0HDeh" Bounds="877,875" />
-              <ControlPoint Id="AeKcYa9FtZgQIrxdzmhBPO" Bounds="1038,872" />
-              <Pad Id="BQr0WUmhWbUM5A3jyAmzA0" SlotId="SmJPCNP5wUoQa35qJck0tm" Bounds="987,839" />
-              <Pad Id="F6Nr03q0JGLOX7h2iu9VxS" SlotId="Fff31eN6VYiLVB0FdR7Ww7" Bounds="1164,844" />
-              <ControlPoint Id="UXyeEMz2CVlPLWpl4LLa0p" Bounds="1244,870" />
-              <ControlPoint Id="CleBzpML6LqLouv4vgp1w1" Bounds="1428,873" />
-              <Pad Id="E8WJtlb6jj9OU8ryQ3yqLC" SlotId="Nvq2ExcIVW7OXeKqoNlQGi" Bounds="1374,845" />
-              <Pad Id="HJbvwcSpWliPq9LPb5CuB5" SlotId="H5zwIMNvKZ4Pvs0sXTvOhH" Bounds="1529,840" />
+              <ControlPoint Id="Dd1tRJbOvLCOACpse0HDeh" Bounds="572,861" />
+              <ControlPoint Id="AeKcYa9FtZgQIrxdzmhBPO" Bounds="733,858" />
+              <Pad Id="BQr0WUmhWbUM5A3jyAmzA0" SlotId="SmJPCNP5wUoQa35qJck0tm" Bounds="682,825" />
+              <Pad Id="F6Nr03q0JGLOX7h2iu9VxS" SlotId="Fff31eN6VYiLVB0FdR7Ww7" Bounds="859,830" />
+              <ControlPoint Id="UXyeEMz2CVlPLWpl4LLa0p" Bounds="939,856" />
+              <ControlPoint Id="CleBzpML6LqLouv4vgp1w1" Bounds="1123,859" />
+              <Pad Id="E8WJtlb6jj9OU8ryQ3yqLC" SlotId="Nvq2ExcIVW7OXeKqoNlQGi" Bounds="1069,831" />
+              <Pad Id="HJbvwcSpWliPq9LPb5CuB5" SlotId="H5zwIMNvKZ4Pvs0sXTvOhH" Bounds="1224,826" />
               <ControlPoint Id="OyeSkVFzlXKMXNfjXVPctj" Bounds="927,1240" />
               <Pad Id="LlCLeXwHDFhM4yrmfINbtQ" SlotId="Fff31eN6VYiLVB0FdR7Ww7" Bounds="1053,1212" />
               <ControlPoint Id="McXysDXkKl8NfU8tFViDqQ" Bounds="1561,1245" />
@@ -21255,7 +21255,7 @@
               <Pad Id="PrO1TpzJSQbOWokMVfzplt" SlotId="Q5zjlvcLXn3ONfy24ag4TT" Bounds="1181,1213" />
               <Pad Id="APKKuR23T1cLi3DMAOlkKf" SlotId="T9ATV4sFDgjM60dSFsFat0" Bounds="1359,1212" />
               <Pad Id="KCDeRYNrfAVQHiZab962H3" SlotId="AkUY0FRHdjbMtixOhvPKS5" Bounds="1531,1213" />
-              <Overlay Id="RbLFsKKAFWANvujdkK76Do" Name="Forward Renderer" Bounds="810,728,884,234" />
+              <Overlay Id="RbLFsKKAFWANvujdkK76Do" Name="Forward Renderer" Bounds="507,728,1187,234" />
               <Overlay Id="CuvavHTvQizPKOc4ZZBbPJ" Name="Mesh Render Feature" Bounds="714,1084,1688,237" />
               <ControlPoint Id="Et9lMBm8y4KMFUo8rdxn1B" Bounds="1083,1237" />
               <ControlPoint Id="SwYrWSHMdc6OWUKnFpyJz3" Bounds="1214,1237" />
@@ -21389,11 +21389,9 @@
             <Link Id="NwMjTntWhiMOJnqO4U7dcR" Ids="R5SJlQhf4z7NQanSRF7pl5,LOqon0M1zIvLgGdM3yOa85" />
             <Link Id="IyOH31kfn47LaQWL1QVocT" Ids="GnYex9iw0RVMCiNEH9Ti7O,CYnzE2Jr27pM0OEekLOcHY" />
             <Link Id="QgsVXkd10z8N8IoFBOuOwO" Ids="HIz0NS9KTSaM3qI9AmaW3m,KujtL6ThQ1LPWaHGhtaXhQ" />
-            <Link Id="TPHl44kzhGgQYHjyOm7ZE7" Ids="Cenh1SZkBaJLu04CWx1NCz,H5BlQwRjkBEMGGO6TebIYr" />
             <Link Id="IUC3Nn1KaczOqkQEy3WiGa" Ids="JkqwGC24pkQMdX9bsqQFjC,OLkeY85NwgePJg13jBrxWf" IsHidden="true" />
             <Link Id="BQSdAQ1JwxlMCgQuGJno9u" Ids="NwSDmQfr3HfOSkDwKN5rPp,AyX56P9pN3XMOGOVJ0cWsU" IsHidden="true" />
             <Link Id="JT1ziHgIjkpMFQpL5CBZAo" Ids="EVdrKGaJpMdLKNzblkRWB1,NfPhAR7sFa5LJeeILrkeza" />
-            <Link Id="MRAsP4g6jkRNUl6C8yUIir" Ids="CZa3r12PTB9NU0eaLvx7L6,DhKbvuOCfjHMqqhcGwh6Ou" />
             <Link Id="SUXmdXutEqyNvQqMKNvNlq" Ids="TIZpkTPZkzQOknSdpZQJ8g,JxcyRIB5c7CNOGQrPa2iZg" IsHidden="true" />
             <Link Id="U9gGfF2FBMGPl14D1BQjsf" Ids="ChEhaOQ6fWIPBOTyOJC806,FCYC1CfTGYFMYUrXv0YbRY" />
             <Link Id="MK0hw4kOOXrOVuDp8wx7pe" Ids="ChEhaOQ6fWIPBOTyOJC806,SKrv5uJOqvaOX96aezuHgY" />
@@ -21525,8 +21523,6 @@
             </Patch>
             <Link Id="STvLLI9t0TxPhZqjBbsddZ" Ids="TfctASzXlIJL1GoByCIU5h,GJrJ7haGwD4LJPAYWX8QyR" />
             <Link Id="EbJZGV4aWcYMDrWIBNGkeX" Ids="R2xs6qIoQCHMqtXkgI7nAo,PjgL0xfx9rkNGenyqkkD9E" />
-            <Link Id="Dh3rQQBJJsuOI87bH4hcSy" Ids="CMa2xQfiNIKOY5hW0SLePC,RNsdCUxlJsaLinBLxzPIy4" />
-            <Link Id="Jr78XSlN4tdLmMPRntLNcV" Ids="O38luS28CYvL9z5ioCtPyZ,RZBmsiBhdxmNRCYRYJgZsm" />
             <Link Id="Abma5KkaF0pNTRYsoeRnPi" Ids="BOXVvNwDWimPnVszyuqIxu,FnWz0cYHdbFP3A2awN7PSj" />
             <Link Id="BvN1aTXeO1cNhnuhW6kD3b" Ids="VrGzA3mVvFCLEvyXOwe3fP,RZbOXYCXJtQPVoQEAKhvfd" />
             <Link Id="CA9PxmeTUn5MUaNmxccdBJ" Ids="CMa2xQfiNIKOY5hW0SLePC,MKgciXDpJryOf1hObog2hP" />
@@ -21555,6 +21551,10 @@
             <Patch Id="Q0yH5pqnAJROE9RKdZlLbs" Name="GetVoxelStages">
               <Pin Id="OdkFSnJaBadPNHiSnuYxCw" Name="Voxel Stages" Kind="OutputPin" />
             </Patch>
+            <Link Id="OQZrc0XXtomLITKaVyCvHF" Ids="CMa2xQfiNIKOY5hW0SLePC,H5BlQwRjkBEMGGO6TebIYr" />
+            <Link Id="SFKD9wDr39SOJsfMXXEjuU" Ids="O38luS28CYvL9z5ioCtPyZ,DhKbvuOCfjHMqqhcGwh6Ou" />
+            <Link Id="Gd6mmzc5a88PkxxFqwswU7" Ids="Cenh1SZkBaJLu04CWx1NCz,RNsdCUxlJsaLinBLxzPIy4" />
+            <Link Id="KcVc71eKbVWMgj5Bdb4SUF" Ids="CZa3r12PTB9NU0eaLvx7L6,RZBmsiBhdxmNRCYRYJgZsm" />
           </Patch>
         </Node>
         <!--
@@ -29729,6 +29729,8 @@
                   <Pin Id="AbgFScwawUHMhgxYAof1dF" Name="Subsurface Scattering Blur Settings" Kind="InputPin" />
                   <Pin Id="EZNINzVkj0YNzqJdI2Ea4D" Name="Bind Depth As Resource During Transparent Rendering" Kind="InputPin" />
                   <Pin Id="PemJIdG3mAhOe78m6teJb0" Name="Output" Kind="OutputPin" />
+                  <Pin Id="AJBRbDI6ELBNCefzUZEKV7" Name="Bind Opaque As Resource During Transparent Rendering" Kind="InputPin" />
+                  <Pin Id="BliYsTFOOW8L0X2Geq5W5s" Name="Debug Voxels" Kind="InputPin" />
                 </Node>
                 <Node Bounds="111,770,45,19" Id="GI9tj2myDxLPKiXkIJITfZ">
                   <p:NodeReference LastCategoryFullName="Stride.Rendering" LastDependency="VL.Stride.Rendering.vl">
